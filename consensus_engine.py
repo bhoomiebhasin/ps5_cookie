@@ -70,6 +70,22 @@ def main() -> int:
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2)
 
+    # also dump rich decision trace for the dashboard + debugging
+    try:
+        trace_path = OUTPUT_PATH.parent / "trace.json"
+        from dataclasses import asdict
+        trace_payload = {
+            "summary": result.trace.summary,
+            "thresholds": result.trace.thresholds,
+            "reps": [asdict(t) for t in result.trace.reps],
+            "proposals": [asdict(t) for t in result.trace.proposals],
+            "quality_report": asdict(data.quality_report),
+        }
+        with open(trace_path, "w", encoding="utf-8") as f:
+            json.dump(trace_payload, f, indent=2, default=str)
+    except Exception:  # never let trace dump break the main output
+        pass
+
     print(f"wrote {OUTPUT_PATH}")
     return 0
 

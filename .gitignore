@@ -11,6 +11,7 @@ venv/
 hidden_tests/
 
 output/result.json
+output/trace.json
 output/*.html
 
 .DS_Store
