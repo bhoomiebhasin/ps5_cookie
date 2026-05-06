@@ -1,155 +1,211 @@
 """
-OWNER: Track A (Data Engineer)
+OWNER: Teammate 1 (Data - Reps + Proposals)
 
-This file is a minimal-but-working stub so the pipeline runs end-to-end from
-minute 1. Track A REPLACES the body of `load_clean()` with proper parsing,
-ID normalization, type coercion, deduping, ghost-reference rejection, and
-quality reporting.
+Responsibilities:
+- read all 4 raw files (parsing only - no cleaning logic here)
+- clean reps:        normalize ids, coerce influence, clamp range, dedup
+- clean proposals:   normalize ids, coerce priority, dedup, reject ghost sponsors
+- orchestrate the full load_clean() that combines your output with Teammate 2's
 
-Scope (Issues 1-9, 18, 20):
-- read 4 files in data/raw/
-- normalize ids (lowercase + strip whitespace)
-- coerce influence/severity/priority to float, clamp ranges
-- drop / merge duplicates with documented rule
-- drop ghost-references
-- populate DataQualityReport with every action taken
-
-The contract: this function returns a CleanedData. Track B reads from there
-and is allowed to assume every invariant in ASSIGNMENTS.md.
+Teammate 2 owns src/cleaner.py (objections + edges). You import their
+functions in load_clean() and merge the quality reports.
 """
 
 from __future__ import annotations
 
-import csv
 import json
 from pathlib import Path
 
+from src._helpers import normalize_id, safe_float
+from src.cleaner import clean_edges, clean_objections
 from src.schema import (
     CleanedData,
     DataQualityReport,
-    Edge,
-    Objection,
     Proposal,
     Rep,
 )
 
-
 DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"
 
 
-def _normalize_id(raw: object) -> str:
-    """Lowercase + strip. TODO Track A: extend if other irregularities surface."""
-    if raw is None:
-        return ""
-    return str(raw).strip().lower()
+# ---------------------------------------------------------------------------
+# raw parsing - just reads bytes off disk
+# ---------------------------------------------------------------------------
 
-
-def _safe_float(value: object, default: float = 0.0) -> float:
-    """Best-effort float coercion. TODO Track A: replace with proper handling
-    that logs into DataQualityReport.clamped_values."""
-    if value is None:
-        return default
-    if isinstance(value, (int, float)):
-        return float(value)
-    try:
-        return float(str(value).strip())
-    except (ValueError, TypeError):
-        return default
-
-
-def load_clean(data_dir: Path = DATA_DIR) -> CleanedData:
-    """
-    Minimal pass-through loader. Produces *something* valid so the pipeline
-    runs, but is NOT competition-quality. Track A rewrites this body.
-    """
-    report = DataQualityReport()
-
-    # representatives
+def load_raw(data_dir: Path = DATA_DIR) -> dict:
+    """Return raw lists/strings exactly as they exist on disk. No cleaning."""
     with open(data_dir / "representatives.json", "r", encoding="utf-8") as f:
         raw_reps = json.load(f)
-    reps_by_id: dict[str, Rep] = {}
+    with open(data_dir / "proposals.json", "r", encoding="utf-8") as f:
+        raw_props = json.load(f)
+    with open(data_dir / "objections.json", "r", encoding="utf-8") as f:
+        raw_objs = json.load(f)
+    return {
+        "reps": raw_reps,
+        "proposals": raw_props,
+        "objections": raw_objs,
+        "csv_path": data_dir / "relations.csv",
+    }
+
+
+# ---------------------------------------------------------------------------
+# YOUR WORK - reps
+# ---------------------------------------------------------------------------
+
+def clean_reps(raw_reps: list[dict]) -> tuple[list[Rep], DataQualityReport]:
+    """
+    Turn the raw representatives list into clean Rep objects.
+
+    Invariants you must guarantee:
+        - every Rep.id is normalized (lowercase + stripped)
+        - no two Reps share an id (document your merge rule below)
+        - every Rep.influence is a float in [0, 100]
+            * "70" -> 70.0
+            * null -> imputed or rep dropped (your choice, document)
+            * 150  -> clamped to 100.0
+        - rep is dropped if id is empty/missing
+
+    Document your dedup rule in this docstring when you implement it.
+    Examples in the dataset:
+        - "REP_001" with influence 80 vs "rep_001" with influence 85 -> ?
+        - " rep_004" with influence 60 vs "rep_004" with influence null -> ?
+
+    Suggested rule (you can change): keep first occurrence, log the
+    duplicate in report.deduped.
+    """
+    report = DataQualityReport()
+    seen: dict[str, Rep] = {}
+
     for r in raw_reps:
-        rid = _normalize_id(r.get("id"))
+        rid = normalize_id(r.get("id"))
         if not rid:
-            report.rejected_reps.append((str(r.get("id")), "missing id"))
+            report.rejected_reps.append((str(r.get("id")), "missing or empty id"))
             continue
-        if rid in reps_by_id:
+        # TODO Teammate 1: replace this naive first-wins rule with a
+        # documented merge strategy. Log every action in `report`.
+        if rid in seen:
             report.deduped.append((rid, str(r.get("id"))))
             continue
-        infl = _safe_float(r.get("influence"), default=0.0)
-        infl = max(0.0, min(100.0, infl))
-        reps_by_id[rid] = Rep(
+
+        infl_raw = r.get("influence")
+        infl = safe_float(infl_raw)
+        if infl is None:
+            # TODO: decide - drop the rep, or impute (mean? 50?). Document.
+            infl = 0.0
+            report.clamped_values.append((rid, "influence", "null -> 0"))
+        elif infl < 0 or infl > 100:
+            report.clamped_values.append((rid, "influence", f"{infl} -> clamped"))
+            infl = max(0.0, min(100.0, infl))
+
+        seen[rid] = Rep(
             id=rid,
-            name=r.get("name", ""),
-            faction=r.get("faction", ""),
+            name=str(r.get("name", "")),
+            faction=str(r.get("faction", "")),
             influence=infl,
             raw=r,
         )
 
-    # proposals
-    with open(data_dir / "proposals.json", "r", encoding="utf-8") as f:
-        raw_props = json.load(f)
-    props_by_id: dict[str, Proposal] = {}
-    for p in raw_props:
-        pid = _normalize_id(p.get("id"))
-        sponsor = _normalize_id(p.get("sponsor"))
+    return list(seen.values()), report
+
+
+# ---------------------------------------------------------------------------
+# YOUR WORK - proposals
+# ---------------------------------------------------------------------------
+
+def clean_proposals(
+    raw_proposals: list[dict],
+    valid_rep_ids: set[str],
+) -> tuple[list[Proposal], DataQualityReport]:
+    """
+    Turn the raw proposals list into clean Proposal objects.
+
+    Invariants:
+        - every Proposal.id is normalized
+        - every Proposal.sponsor is normalized AND in valid_rep_ids
+          (drop any proposal whose sponsor is a ghost)
+        - every Proposal.priority is a float
+        - duplicate proposal ids deduped (document your rule)
+
+    Examples in the dataset:
+        - prop_003 appears twice: priority 9.5 vs 7. Pick one, document.
+        - prop_005 sponsored by rep_099 which doesn't exist -> drop.
+
+    Suggested rule (you can change): for duplicates, keep the one with
+    HIGHEST priority (assume revisions are softening, original is the
+    real intent). Or keep first. Pick one, document, move on.
+    """
+    report = DataQualityReport()
+    seen: dict[str, Proposal] = {}
+
+    for p in raw_proposals:
+        pid = normalize_id(p.get("id"))
+        sponsor = normalize_id(p.get("sponsor"))
         if not pid:
             report.rejected_proposals.append((str(p.get("id")), "missing id"))
             continue
-        if sponsor not in reps_by_id:
+        if sponsor not in valid_rep_ids:
             report.rejected_proposals.append((pid, f"ghost sponsor {sponsor}"))
             continue
-        if pid in props_by_id:
-            report.deduped.append((pid, "duplicate proposal"))
-            continue
-        props_by_id[pid] = Proposal(
-            id=pid,
-            title=p.get("title", ""),
-            sponsor=sponsor,
-            priority=_safe_float(p.get("priority"), default=0.0),
-        )
 
-    # objections
-    with open(data_dir / "objections.json", "r", encoding="utf-8") as f:
-        raw_objs = json.load(f)
-    objections: list[Objection] = []
-    for o in raw_objs:
-        rid = _normalize_id(o.get("rep_id"))
-        pid = _normalize_id(o.get("proposal_id"))
-        if rid not in reps_by_id:
-            report.rejected_objections.append((f"{rid}->{pid}", "ghost rep"))
+        priority = safe_float(p.get("priority"))
+        if priority is None:
+            report.rejected_proposals.append((pid, "non-numeric priority"))
             continue
-        if pid not in props_by_id:
-            report.rejected_objections.append((f"{rid}->{pid}", "ghost proposal"))
-            continue
-        sev = _safe_float(o.get("severity"), default=0.0)
-        sev = max(0.0, min(10.0, sev))
-        objections.append(
-            Objection(rep_id=rid, proposal_id=pid, severity=sev, reason=o.get("reason"))
-        )
 
-    # relations
-    edges: list[Edge] = []
-    with open(data_dir / "relations.csv", "r", encoding="utf-8", newline="") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            try:
-                src = _normalize_id(row.get("from"))
-                dst = _normalize_id(row.get("to"))
-                if src not in reps_by_id or dst not in reps_by_id:
-                    report.rejected_edges.append((f"{src}->{dst}", "ghost endpoint"))
-                    continue
-                trust = max(0.0, min(100.0, _safe_float(row.get("trust"), 0.0)))
-                rivalry = max(0.0, min(100.0, _safe_float(row.get("rivalry"), 0.0)))
-                betrayal = max(0.0, min(1.0, _safe_float(row.get("betrayal_prob"), 0.0)))
-                edges.append(Edge(src, dst, trust, rivalry, betrayal))
-            except Exception as e:
-                report.rejected_edges.append((str(row), f"parse error: {e}"))
+        # TODO Teammate 1: replace this with your documented dedup rule.
+        if pid in seen:
+            report.deduped.append((pid, f"dup priority {priority}"))
+            continue
+
+        seen[pid] = Proposal(id=pid, title=str(p.get("title", "")),
+                             sponsor=sponsor, priority=priority)
+
+    return list(seen.values()), report
+
+
+# ---------------------------------------------------------------------------
+# orchestrator - combines your work with Teammate 2's
+# ---------------------------------------------------------------------------
+
+def _merge_reports(*reports: DataQualityReport) -> DataQualityReport:
+    out = DataQualityReport()
+    for r in reports:
+        out.rejected_reps.extend(r.rejected_reps)
+        out.rejected_proposals.extend(r.rejected_proposals)
+        out.rejected_objections.extend(r.rejected_objections)
+        out.rejected_edges.extend(r.rejected_edges)
+        out.normalized_ids.update(r.normalized_ids)
+        out.deduped.extend(r.deduped)
+        out.clamped_values.extend(r.clamped_values)
+    return out
+
+
+def load_clean(data_dir: Path = DATA_DIR) -> CleanedData:
+    """
+    End-to-end: parse + clean + assemble. Track B consumes the result and
+    is allowed to assume every invariant in ASSIGNMENTS.md.
+
+    Pipeline:
+        load_raw -> clean_reps -> clean_proposals
+                                -> clean_objections (Teammate 2)
+                                -> clean_edges      (Teammate 2)
+        merge reports -> CleanedData
+    """
+    raw = load_raw(data_dir)
+
+    reps, r_rep = clean_reps(raw["reps"])
+    rep_ids = {r.id for r in reps}
+
+    proposals, r_prop = clean_proposals(raw["proposals"], rep_ids)
+    prop_ids = {p.id for p in proposals}
+
+    objections, r_obj = clean_objections(raw["objections"], rep_ids, prop_ids)
+    edges, r_edge = clean_edges(raw["csv_path"], rep_ids)
 
     return CleanedData(
-        reps=list(reps_by_id.values()),
-        proposals=list(props_by_id.values()),
+        reps=reps,
+        proposals=proposals,
         objections=objections,
         edges=edges,
-        quality_report=report,
+        quality_report=_merge_reports(r_rep, r_prop, r_obj, r_edge),
     )
