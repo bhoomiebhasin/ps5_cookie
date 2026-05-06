@@ -56,24 +56,47 @@ def clean_reps(raw_reps: list[dict]) -> tuple[list[Rep], DataQualityReport]:
     """
     Turn the raw representatives list into clean Rep objects.
 
-    Invariants you must guarantee:
+    Invariants guaranteed:
         - every Rep.id is normalized (lowercase + stripped)
-        - no two Reps share an id (document your merge rule below)
+        - no two Reps share an id
         - every Rep.influence is a float in [0, 100]
-            * "70" -> 70.0
-            * null -> imputed or rep dropped (your choice, document)
-            * 150  -> clamped to 100.0
+            * "70"  -> 70.0
+            * null  -> imputed with the mean of all other valid influences
+            * 150   -> clamped to 100.0
         - rep is dropped if id is empty/missing
 
-    Document your dedup rule in this docstring when you implement it.
-    Examples in the dataset:
-        - "REP_001" with influence 80 vs "rep_001" with influence 85 -> ?
-        - " rep_004" with influence 60 vs "rep_004" with influence null -> ?
+    Dedup rule (KEEP HIGHEST INFLUENCE):
+        When two raw records normalize to the same id (e.g. "REP_001" and
+        "rep_001"), we keep whichever has the higher influence value and
+        discard the other. Rationale: the higher value reflects the more
+        capable/recently-updated record; keeping the lower would under-weight
+        that representative in scoring.
+        Example outcomes on sample data:
+            - "REP_001" (80) vs "rep_001" (85) -> keep rep_001 (85)
+            - " rep_004" (60) vs "rep_004" (null->imputed) -> keep rep_004 (60)
 
-    Suggested rule (you can change): keep first occurrence, log the
-    duplicate in report.deduped.
+    Null influence rule (MEAN IMPUTATION):
+        Rather than dropping the rep or assigning an arbitrary constant, we
+        impute using the mean of all other reps' valid, clamped influences.
+        This is statistically neutral and avoids biasing the rep toward
+        either extreme. The imputed value is logged in report.clamped_values.
     """
     report = DataQualityReport()
+
+    # --- Pass 1: collect all valid (non-null) clamped influence values
+    #     so we can compute the mean for null imputation.
+    valid_influences: list[float] = []
+    for r in raw_reps:
+        rid = normalize_id(r.get("id"))
+        if not rid:
+            continue
+        infl = safe_float(r.get("influence"))
+        if infl is not None:
+            valid_influences.append(max(0.0, min(100.0, infl)))
+    mean_influence = (sum(valid_influences) / len(valid_influences)
+                      if valid_influences else 50.0)
+
+    # --- Pass 2: build clean Rep objects, enforcing all invariants.
     seen: dict[str, Rep] = {}
 
     for r in raw_reps:
@@ -81,29 +104,50 @@ def clean_reps(raw_reps: list[dict]) -> tuple[list[Rep], DataQualityReport]:
         if not rid:
             report.rejected_reps.append((str(r.get("id")), "missing or empty id"))
             continue
-        # TODO Teammate 1: replace this naive first-wins rule with a
-        # documented merge strategy. Log every action in `report`.
-        if rid in seen:
-            report.deduped.append((rid, str(r.get("id"))))
-            continue
 
         infl_raw = r.get("influence")
         infl = safe_float(infl_raw)
         if infl is None:
-            # TODO: decide - drop the rep, or impute (mean? 50?). Document.
-            infl = 0.0
-            report.clamped_values.append((rid, "influence", "null -> 0"))
+            infl = round(mean_influence, 2)
+            report.clamped_values.append(
+                (rid, "influence", f"null -> mean imputed {infl}")
+            )
         elif infl < 0 or infl > 100:
-            report.clamped_values.append((rid, "influence", f"{infl} -> clamped"))
-            infl = max(0.0, min(100.0, infl))
+            clamped = max(0.0, min(100.0, infl))
+            report.clamped_values.append(
+                (rid, "influence", f"{infl} -> clamped to {clamped}")
+            )
+            infl = clamped
 
-        seen[rid] = Rep(
-            id=rid,
-            name=str(r.get("name", "")),
-            faction=str(r.get("faction", "")),
-            influence=infl,
-            raw=r,
-        )
+        if rid in seen:
+            existing = seen[rid]
+            if infl > existing.influence:
+                # Incoming record has higher influence — it wins.
+                report.deduped.append(
+                    (rid, f"replaced influence {existing.influence} with {infl} "
+                          f"(raw id: {str(r.get('id'))}")
+                )
+                seen[rid] = Rep(
+                    id=rid,
+                    name=str(r.get("name", existing.name)),
+                    faction=str(r.get("faction", existing.faction)),
+                    influence=infl,
+                    raw=r,
+                )
+            else:
+                # Existing record wins; log the incoming duplicate.
+                report.deduped.append(
+                    (rid, f"kept influence {existing.influence}, discarded {infl} "
+                          f"(raw id: {str(r.get('id'))}")
+                )
+        else:
+            seen[rid] = Rep(
+                id=rid,
+                name=str(r.get("name", "")),
+                faction=str(r.get("faction", "")),
+                influence=infl,
+                raw=r,
+            )
 
     return list(seen.values()), report
 
@@ -119,20 +163,28 @@ def clean_proposals(
     """
     Turn the raw proposals list into clean Proposal objects.
 
-    Invariants:
+    Invariants guaranteed:
         - every Proposal.id is normalized
         - every Proposal.sponsor is normalized AND in valid_rep_ids
-          (drop any proposal whose sponsor is a ghost)
+          (proposals with ghost sponsors are dropped)
         - every Proposal.priority is a float
-        - duplicate proposal ids deduped (document your rule)
+        - duplicate proposal ids deduped
 
-    Examples in the dataset:
-        - prop_003 appears twice: priority 9.5 vs 7. Pick one, document.
-        - prop_005 sponsored by rep_099 which doesn't exist -> drop.
+    Dedup rule (KEEP HIGHEST PRIORITY):
+        When two records share the same proposal id, we keep the one with
+        the higher priority value and discard the lower. Rationale: the
+        original submission typically carries the strongest mandate;
+        later revisions that lower the priority number should not override
+        the original intent. This also naturally surfaces the most urgent
+        proposals to the scoring stage.
+        Example on sample data:
+            - prop_003 priority 9.5 vs 7 -> keep 9.5, discard 7.
 
-    Suggested rule (you can change): for duplicates, keep the one with
-    HIGHEST priority (assume revisions are softening, original is the
-    real intent). Or keep first. Pick one, document, move on.
+    Ghost sponsor rule:
+        Any proposal whose sponsor id (after normalization) is not in
+        valid_rep_ids is silently dropped and logged in
+        report.rejected_proposals.
+        Example: prop_005 sponsored by rep_099 -> dropped.
     """
     report = DataQualityReport()
     seen: dict[str, Proposal] = {}
@@ -144,7 +196,7 @@ def clean_proposals(
             report.rejected_proposals.append((str(p.get("id")), "missing id"))
             continue
         if sponsor not in valid_rep_ids:
-            report.rejected_proposals.append((pid, f"ghost sponsor {sponsor}"))
+            report.rejected_proposals.append((pid, f"ghost sponsor: {sponsor!r}"))
             continue
 
         priority = safe_float(p.get("priority"))
@@ -152,13 +204,33 @@ def clean_proposals(
             report.rejected_proposals.append((pid, "non-numeric priority"))
             continue
 
-        # TODO Teammate 1: replace this with your documented dedup rule.
         if pid in seen:
-            report.deduped.append((pid, f"dup priority {priority}"))
-            continue
-
-        seen[pid] = Proposal(id=pid, title=str(p.get("title", "")),
-                             sponsor=sponsor, priority=priority)
+            existing = seen[pid]
+            if priority > existing.priority:
+                # Incoming has higher priority — it wins.
+                report.deduped.append(
+                    (pid, f"replaced priority {existing.priority} with {priority} "
+                          f"(title: {str(p.get('title', ''))}")
+                )
+                seen[pid] = Proposal(
+                    id=pid,
+                    title=str(p.get("title", existing.title)),
+                    sponsor=sponsor,
+                    priority=priority,
+                )
+            else:
+                # Existing wins; log the incoming lower-priority duplicate.
+                report.deduped.append(
+                    (pid, f"kept priority {existing.priority}, discarded {priority} "
+                          f"(title: {str(p.get('title', ''))}")
+                )
+        else:
+            seen[pid] = Proposal(
+                id=pid,
+                title=str(p.get("title", "")),
+                sponsor=sponsor,
+                priority=priority,
+            )
 
     return list(seen.values()), report
 
