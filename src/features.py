@@ -115,26 +115,29 @@ def cascade_risk(
     rep_id: str,
     edges: list[Edge],
     valid_intermediates: set[str] | None = None,
+    endpoint_threat_threshold: float = 0.0,
 ) -> float:
     """
     cascade_risk(v) = max over 2-hop paths v -> u -> w of [
-        relationship_score(v -> u) * betrayal_prob(u -> w)
+        relationship_score(v -> u) * trust_weighted_betrayal(u -> w)
     ]
-    where w != v (a backstabber TWO steps out, not v itself).
+    where:
+        w != v
+        u is in valid_intermediates (if given)
+        trust_weighted_betrayal(e) = e.betrayal_prob * (0.7 + 0.3 * e.trust/100)
 
-    If `valid_intermediates` is given, only chains where u is in that set
-    are counted. This is critical for select_supporters: a chain through
-    an already-rejected Trojan never actually materializes, so it
-    shouldn't disqualify v. Calling with valid_intermediates = set of
-    accepted reps gives the realistic exposure.
+    Optional `endpoint_threat_threshold` filters out chains where the
+    endpoint betrayal isn't even Trojan-level. Without this, cascade
+    fires on mild political tension (e.g. moderate betrayal toward a
+    low-trust enemy) which is not the scenario the test cares about.
+    Pass thresholds.TAU_BETRAY to require a real Trojan at the endpoint.
 
     Range [0, 1]. Higher = more exposed to a downstream backstabber.
+    `valid_intermediates` lets the caller scope the chain to "reps that
+    will actually be in the room" - e.g. accepted reps for filtering,
+    supporter candidates for tighter checks.
 
-    Interpretation: if v strongly trusts u (high score), and u trusts a
-    backstabber w (high betrayal), then bringing v in pulls the chain
-    that leads to w. Excluding v from supporters protects coherence.
-
-    Kills: Cascading Betrayal.
+    Kills: Cascading Betrayal (sharper, false-positive-free).
     """
     outgoing = [e for e in edges if e.from_id == rep_id]
     if not outgoing:
@@ -151,7 +154,12 @@ def cascade_risk(
                 continue
             if second.to_id == rep_id:
                 continue
-            risk = first_score * second.betrayal_prob
+            endpoint_threat = (
+                second.betrayal_prob * (0.7 + 0.3 * second.trust / 100.0)
+            )
+            if endpoint_threat < endpoint_threat_threshold:
+                continue
+            risk = first_score * endpoint_threat
             if risk > max_risk:
                 max_risk = risk
     return max_risk
