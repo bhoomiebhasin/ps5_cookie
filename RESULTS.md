@@ -87,8 +87,10 @@ is what the dashboard's "Data Quality" tab renders.
 
 ## 6. Hidden-scenario fixtures
 
-`tests/_make_fixtures.py` writes 18 minimal-but-decisive fixtures, each
-a folder under `tests/fixtures/`. Running `pytest tests/` produces:
+`tests/_make_fixtures.py` writes 19 minimal-but-decisive fixtures (the 18
+hidden-test scenarios from the brief plus a graceful-degradation stress
+test), each a folder under `tests/fixtures/`. Running `pytest tests/`
+produces:
 
 ```
 tests/test_scenarios.py::test_scenario[01_trojan_horse]            PASSED
@@ -109,7 +111,8 @@ tests/test_scenarios.py::test_scenario[15_duplicate_proposals]     PASSED
 tests/test_scenarios.py::test_scenario[16_null_influence]          PASSED
 tests/test_scenarios.py::test_scenario[17_scale_correctness]       PASSED
 tests/test_scenarios.py::test_scenario[18_dirty_csv]               PASSED
-================================== 18 passed ==================================
+tests/test_scenarios.py::test_scenario[19_mass_rejection]          PASSED
+================================== 19 passed ==================================
 ```
 
 Each `expected.json` asserts at least one of:

@@ -627,4 +627,52 @@ write_fixture(
 )
 
 
-print(f"Wrote 18 fixtures under {ROOT}")
+# ---------------------------------------------------------------------------
+# 19 - Mass Rejection (graceful degradation)
+# 4 of 5 reps are malicious (Trojans + Infiltrator). Engine must still
+# produce a non-crashing, format-valid output backed by the lone clean rep.
+# ---------------------------------------------------------------------------
+
+write_fixture(
+    "19_mass_rejection",
+    reps=[
+        {"id": "rep_clean",  "name": "Clean",       "faction": "Reformers",     "influence": 80},
+        {"id": "rep_troj_a", "name": "Trojan A",    "faction": "Reformers",     "influence": 95},
+        {"id": "rep_troj_b", "name": "Trojan B",    "faction": "Conservatives", "influence": 90},
+        {"id": "rep_infil",  "name": "Infiltrator", "faction": "Reformers",     "influence": 85},
+        {"id": "rep_quiet",  "name": "Quiet",       "faction": "Conservatives", "influence": 60},
+    ],
+    proposals=[
+        {"id": "prop_only", "title": "Reform Bill", "sponsor": "rep_clean", "priority": 7}
+    ],
+    objections=[],
+    relations=[
+        # Clean rep has a small honest network.
+        edge("rep_clean", "rep_quiet", 70, 10, 0.05),
+        edge("rep_quiet", "rep_clean", 70, 10, 0.05),
+
+        # Trojan A betrays an "ally" inside Reformers.
+        edge("rep_troj_a", "rep_clean", 80, 10, 0.92),
+        edge("rep_clean",  "rep_troj_a", 30, 30, 0.10),
+
+        # Trojan B betrays Conservatives partner.
+        edge("rep_troj_b", "rep_quiet", 80, 10, 0.90),
+        edge("rep_quiet",  "rep_troj_b", 30, 30, 0.10),
+
+        # Infiltrator: same faction as clean, high in-faction betrayal.
+        edge("rep_infil",  "rep_clean",  60, 30, 0.85),
+        edge("rep_infil",  "rep_troj_a", 60, 30, 0.85),
+        edge("rep_clean",  "rep_infil",  40, 40, 0.20),
+    ],
+    expected={
+        # Clean rep should still surface as a supporter; quiet survives too.
+        "supporters_must_include": ["rep_clean"],
+        # Malicious reps must not appear.
+        "supporters_must_exclude": ["rep_troj_a", "rep_troj_b", "rep_infil"],
+        # The lone proposal sponsored by the clean rep is still selected.
+        "proposals_must_include": ["prop_only"],
+    },
+)
+
+
+print(f"Wrote 19 fixtures under {ROOT}")

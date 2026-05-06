@@ -1,0 +1,10 @@
+from,to,trust,rivalry,betrayal_prob,last_interaction
+rep_clean,rep_quiet,70,10,0.05,2024-10-01
+rep_quiet,rep_clean,70,10,0.05,2024-10-01
+rep_troj_a,rep_clean,80,10,0.92,2024-10-01
+rep_clean,rep_troj_a,30,30,0.1,2024-10-01
+rep_troj_b,rep_quiet,80,10,0.9,2024-10-01
+rep_quiet,rep_troj_b,30,30,0.1,2024-10-01
+rep_infil,rep_clean,60,30,0.85,2024-10-01
+rep_infil,rep_troj_a,60,30,0.85,2024-10-01
+rep_clean,rep_infil,40,40,0.2,2024-10-01

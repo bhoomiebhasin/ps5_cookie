@@ -1,0 +1,13 @@
+{
+  "supporters_must_include": [
+    "rep_clean"
+  ],
+  "supporters_must_exclude": [
+    "rep_troj_a",
+    "rep_troj_b",
+    "rep_infil"
+  ],
+  "proposals_must_include": [
+    "prop_only"
+  ]
+}

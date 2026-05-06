@@ -194,8 +194,10 @@ dashboard exposes all of them as live sliders.
 | 17 | Scale Correctness      | O(R^2 + R * P) overall, exhaustive subset capped at K_MAX=5          |
 | 18 | Dirty CSV Rows         | per-row try/except in cleaner, bad rows -> rejected_edges            |
 
-All 18 are exercised locally as fixtures under `tests/fixtures/`.
-`pytest tests/` runs all 18.
+All 18 are exercised locally as fixtures under `tests/fixtures/`, plus a
+19th stress-test fixture (`19_mass_rejection`) that verifies graceful
+degradation when most of the population is malicious. `pytest tests/`
+runs all 19.
 
 ## 6. Reproducing the run
 

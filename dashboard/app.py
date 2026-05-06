@@ -37,11 +37,36 @@ st.set_page_config(page_title="Phantom Consensus", layout="wide")
 
 
 # ---------------------------------------------------------------------------
-# Sidebar - threshold sliders (Differentiator: live sensitivity)
+# Sidebar - dataset picker
+#
+# Lets a judge / user flip between the competition data and any of the 18
+# hidden-scenario fixtures, so the engine's behaviour on each named test
+# is visible end-to-end without leaving the dashboard.
 # ---------------------------------------------------------------------------
 
 st.sidebar.title("Phantom Consensus")
 st.sidebar.markdown("**Strategic Consensus Engine**")
+st.sidebar.divider()
+
+DATA_RAW = ROOT / "data" / "raw"
+FIXTURES = ROOT / "tests" / "fixtures"
+
+dataset_options: dict[str, Path] = {"Competition data (data/raw)": DATA_RAW}
+if FIXTURES.exists():
+    for d in sorted(FIXTURES.iterdir()):
+        if d.is_dir() and (d / "representatives.json").exists():
+            dataset_options[f"Fixture: {d.name}"] = d
+
+st.sidebar.subheader("Dataset")
+selected_label = st.sidebar.selectbox(
+    "Source",
+    list(dataset_options.keys()),
+    index=0,
+    help="Pick competition data or any hidden-scenario fixture.",
+)
+selected_path = dataset_options[selected_label]
+st.sidebar.caption(f"`{selected_path.relative_to(ROOT)}`")
+
 st.sidebar.divider()
 st.sidebar.subheader("Thresholds (live)")
 st.sidebar.caption(
@@ -70,13 +95,68 @@ for name, value in overrides.items():
 
 
 # ---------------------------------------------------------------------------
-# Run pipeline
+# Run pipeline on the selected dataset
 # ---------------------------------------------------------------------------
 
-data = load_clean()
-result = run_consensus(data)
+try:
+    data = load_clean(selected_path)
+    result = run_consensus(data)
+    pipeline_error: Exception | None = None
+except Exception as exc:
+    data = None
+    result = None
+    pipeline_error = exc
 
 st.title("Phantom Consensus - Strategic Consensus Engine")
+st.caption(f"Active dataset: **{selected_label}**")
+
+if pipeline_error is not None:
+    st.error(
+        f"Pipeline failed on `{selected_path.name}`:\n\n```\n{pipeline_error}\n```"
+    )
+    st.stop()
+
+# Optional: show the fixture's expected.json next to the live result so
+# the judge can verify hidden-test behaviour at a glance.
+expected_path = selected_path / "expected.json"
+if expected_path.exists():
+    import json
+    expected = json.loads(expected_path.read_text(encoding="utf-8"))
+    with st.expander("Fixture: expected assertions vs. actual result", expanded=True):
+        actual_props = set(result.final_agreement.get("proposals", []))
+        actual_sups = set(result.final_agreement.get("supporting_reps", []))
+        actual_alli = {tuple(sorted(p)) for p in result.alliances}
+
+        rows = []
+        for must in expected.get("proposals_must_include", []):
+            rows.append(("proposal must include", must, must in actual_props))
+        for must_not in expected.get("proposals_must_exclude", []):
+            rows.append(("proposal must exclude", must_not,
+                         must_not not in actual_props))
+        for must in expected.get("supporters_must_include", []):
+            rows.append(("supporter must include", must, must in actual_sups))
+        for must_not in expected.get("supporters_must_exclude", []):
+            rows.append(("supporter must exclude", must_not,
+                         must_not not in actual_sups))
+        for pair in expected.get("alliances_must_include", []):
+            rows.append(("alliance must include", " <-> ".join(pair),
+                         tuple(sorted(pair)) in actual_alli))
+        if expected.get("alliances_must_be_empty"):
+            rows.append(("alliances must be empty", "-",
+                         len(actual_alli) == 0))
+
+        if rows:
+            df_exp = pd.DataFrame(rows, columns=["check", "target", "passed"])
+            df_exp["passed"] = df_exp["passed"].map({True: "PASS", False: "FAIL"})
+            def color(v):
+                return ("background-color: #c8e6c9" if v == "PASS"
+                        else "background-color: #ffcdd2")
+            st.dataframe(
+                df_exp.style.map(color, subset=["passed"]),
+                use_container_width=True, hide_index=True,
+            )
+        else:
+            st.info("expected.json has no assertions for this fixture.")
 
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Reps loaded",      len(data.reps))
