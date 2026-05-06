@@ -1,0 +1,20 @@
+[
+  {
+    "id": "REP_001",
+    "name": "Capitalized",
+    "faction": "X",
+    "influence": 80
+  },
+  {
+    "id": "rep_001",
+    "name": "Lowercase",
+    "faction": "X",
+    "influence": 85
+  },
+  {
+    "id": " rep_002 ",
+    "name": "Whitespace",
+    "faction": "X",
+    "influence": 75
+  }
+]

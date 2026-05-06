@@ -1,0 +1,8 @@
+{
+  "proposals_must_include": [
+    "prop_solo"
+  ],
+  "supporters_must_include": [
+    "rep_solo"
+  ]
+}

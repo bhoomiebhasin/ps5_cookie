@@ -1,0 +1,17 @@
+[
+  {
+    "rep_id": "rep_a",
+    "proposal_id": "prop_pill",
+    "severity": 10
+  },
+  {
+    "rep_id": "rep_b",
+    "proposal_id": "prop_pill",
+    "severity": 10
+  },
+  {
+    "rep_id": "rep_c",
+    "proposal_id": "prop_pill",
+    "severity": 10
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "alliances_must_include": [
+    [
+      "rep_000",
+      "rep_001"
+    ]
+  ]
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "prop_dup",
+    "title": "Original",
+    "sponsor": "rep_a",
+    "priority": 9.5
+  },
+  {
+    "id": "prop_dup",
+    "title": "Revision",
+    "sponsor": "rep_a",
+    "priority": 6.0
+  }
+]

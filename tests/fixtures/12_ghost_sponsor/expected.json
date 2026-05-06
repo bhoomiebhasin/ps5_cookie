@@ -1,0 +1,8 @@
+{
+  "proposals_must_include": [
+    "prop_real"
+  ],
+  "proposals_must_exclude": [
+    "prop_ghost"
+  ]
+}

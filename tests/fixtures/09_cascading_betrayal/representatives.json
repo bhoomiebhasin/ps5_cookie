@@ -1,0 +1,20 @@
+[
+  {
+    "id": "rep_a",
+    "name": "A",
+    "faction": "X",
+    "influence": 80
+  },
+  {
+    "id": "rep_b",
+    "name": "B",
+    "faction": "X",
+    "influence": 75
+  },
+  {
+    "id": "rep_c",
+    "name": "C (Trojan endpoint)",
+    "faction": "X",
+    "influence": 90
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "prop_pill",
+    "title": "Universally Hated Bill",
+    "sponsor": "rep_a",
+    "priority": 10
+  },
+  {
+    "id": "prop_safe",
+    "title": "Boring But Safe",
+    "sponsor": "rep_a",
+    "priority": 6
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "prop_divisive",
+    "title": "Divisive Bill",
+    "sponsor": "rep_a",
+    "priority": 9
+  },
+  {
+    "id": "prop_consensus",
+    "title": "Consensus Bill",
+    "sponsor": "rep_b",
+    "priority": 7
+  }
+]

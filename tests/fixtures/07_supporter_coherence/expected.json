@@ -1,0 +1,8 @@
+{
+  "proposals_must_include": [
+    "prop_x"
+  ],
+  "supporters_must_exclude": [
+    "rep_b"
+  ]
+}

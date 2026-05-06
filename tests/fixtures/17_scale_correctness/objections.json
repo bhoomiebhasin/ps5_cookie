@@ -1,0 +1,402 @@
+[
+  {
+    "rep_id": "rep_007",
+    "proposal_id": "prop_010",
+    "severity": 1
+  },
+  {
+    "rep_id": "rep_006",
+    "proposal_id": "prop_000",
+    "severity": 3
+  },
+  {
+    "rep_id": "rep_034",
+    "proposal_id": "prop_003",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_039",
+    "proposal_id": "prop_000",
+    "severity": 2
+  },
+  {
+    "rep_id": "rep_013",
+    "proposal_id": "prop_019",
+    "severity": 7
+  },
+  {
+    "rep_id": "rep_009",
+    "proposal_id": "prop_020",
+    "severity": 5
+  },
+  {
+    "rep_id": "rep_022",
+    "proposal_id": "prop_019",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_030",
+    "proposal_id": "prop_003",
+    "severity": 2
+  },
+  {
+    "rep_id": "rep_031",
+    "proposal_id": "prop_014",
+    "severity": 8
+  },
+  {
+    "rep_id": "rep_030",
+    "proposal_id": "prop_009",
+    "severity": 2
+  },
+  {
+    "rep_id": "rep_009",
+    "proposal_id": "prop_003",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_047",
+    "proposal_id": "prop_008",
+    "severity": 8
+  },
+  {
+    "rep_id": "rep_044",
+    "proposal_id": "prop_005",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_001",
+    "proposal_id": "prop_006",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_023",
+    "proposal_id": "prop_004",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_001",
+    "proposal_id": "prop_024",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_019",
+    "proposal_id": "prop_020",
+    "severity": 2
+  },
+  {
+    "rep_id": "rep_044",
+    "proposal_id": "prop_027",
+    "severity": 5
+  },
+  {
+    "rep_id": "rep_033",
+    "proposal_id": "prop_011",
+    "severity": 3
+  },
+  {
+    "rep_id": "rep_022",
+    "proposal_id": "prop_024",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_034",
+    "proposal_id": "prop_017",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_021",
+    "proposal_id": "prop_020",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_039",
+    "proposal_id": "prop_025",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_015",
+    "proposal_id": "prop_026",
+    "severity": 7
+  },
+  {
+    "rep_id": "rep_047",
+    "proposal_id": "prop_025",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_012",
+    "proposal_id": "prop_016",
+    "severity": 8
+  },
+  {
+    "rep_id": "rep_022",
+    "proposal_id": "prop_023",
+    "severity": 1
+  },
+  {
+    "rep_id": "rep_001",
+    "proposal_id": "prop_025",
+    "severity": 5
+  },
+  {
+    "rep_id": "rep_030",
+    "proposal_id": "prop_008",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_044",
+    "proposal_id": "prop_019",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_028",
+    "proposal_id": "prop_025",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_023",
+    "proposal_id": "prop_002",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_006",
+    "proposal_id": "prop_007",
+    "severity": 8
+  },
+  {
+    "rep_id": "rep_012",
+    "proposal_id": "prop_010",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_030",
+    "proposal_id": "prop_019",
+    "severity": 1
+  },
+  {
+    "rep_id": "rep_030",
+    "proposal_id": "prop_029",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_041",
+    "proposal_id": "prop_002",
+    "severity": 2
+  },
+  {
+    "rep_id": "rep_024",
+    "proposal_id": "prop_025",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_030",
+    "proposal_id": "prop_028",
+    "severity": 3
+  },
+  {
+    "rep_id": "rep_027",
+    "proposal_id": "prop_025",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_005",
+    "proposal_id": "prop_025",
+    "severity": 7
+  },
+  {
+    "rep_id": "rep_029",
+    "proposal_id": "prop_012",
+    "severity": 2
+  },
+  {
+    "rep_id": "rep_046",
+    "proposal_id": "prop_005",
+    "severity": 3
+  },
+  {
+    "rep_id": "rep_008",
+    "proposal_id": "prop_000",
+    "severity": 3
+  },
+  {
+    "rep_id": "rep_037",
+    "proposal_id": "prop_028",
+    "severity": 8
+  },
+  {
+    "rep_id": "rep_041",
+    "proposal_id": "prop_004",
+    "severity": 8
+  },
+  {
+    "rep_id": "rep_042",
+    "proposal_id": "prop_029",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_009",
+    "proposal_id": "prop_017",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_008",
+    "proposal_id": "prop_000",
+    "severity": 1
+  },
+  {
+    "rep_id": "rep_046",
+    "proposal_id": "prop_020",
+    "severity": 2
+  },
+  {
+    "rep_id": "rep_033",
+    "proposal_id": "prop_023",
+    "severity": 3
+  },
+  {
+    "rep_id": "rep_027",
+    "proposal_id": "prop_027",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_013",
+    "proposal_id": "prop_000",
+    "severity": 5
+  },
+  {
+    "rep_id": "rep_013",
+    "proposal_id": "prop_009",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_015",
+    "proposal_id": "prop_024",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_016",
+    "proposal_id": "prop_017",
+    "severity": 7
+  },
+  {
+    "rep_id": "rep_008",
+    "proposal_id": "prop_001",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_029",
+    "proposal_id": "prop_021",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_026",
+    "proposal_id": "prop_026",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_008",
+    "proposal_id": "prop_017",
+    "severity": 3
+  },
+  {
+    "rep_id": "rep_033",
+    "proposal_id": "prop_016",
+    "severity": 1
+  },
+  {
+    "rep_id": "rep_028",
+    "proposal_id": "prop_024",
+    "severity": 3
+  },
+  {
+    "rep_id": "rep_038",
+    "proposal_id": "prop_000",
+    "severity": 3
+  },
+  {
+    "rep_id": "rep_011",
+    "proposal_id": "prop_004",
+    "severity": 8
+  },
+  {
+    "rep_id": "rep_039",
+    "proposal_id": "prop_023",
+    "severity": 2
+  },
+  {
+    "rep_id": "rep_035",
+    "proposal_id": "prop_001",
+    "severity": 6
+  },
+  {
+    "rep_id": "rep_043",
+    "proposal_id": "prop_016",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_035",
+    "proposal_id": "prop_015",
+    "severity": 2
+  },
+  {
+    "rep_id": "rep_035",
+    "proposal_id": "prop_001",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_012",
+    "proposal_id": "prop_008",
+    "severity": 1
+  },
+  {
+    "rep_id": "rep_049",
+    "proposal_id": "prop_003",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_028",
+    "proposal_id": "prop_017",
+    "severity": 1
+  },
+  {
+    "rep_id": "rep_048",
+    "proposal_id": "prop_028",
+    "severity": 2
+  },
+  {
+    "rep_id": "rep_028",
+    "proposal_id": "prop_010",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_038",
+    "proposal_id": "prop_016",
+    "severity": 4
+  },
+  {
+    "rep_id": "rep_044",
+    "proposal_id": "prop_008",
+    "severity": 8
+  },
+  {
+    "rep_id": "rep_032",
+    "proposal_id": "prop_017",
+    "severity": 8
+  },
+  {
+    "rep_id": "rep_032",
+    "proposal_id": "prop_007",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_016",
+    "proposal_id": "prop_029",
+    "severity": 9
+  },
+  {
+    "rep_id": "rep_012",
+    "proposal_id": "prop_026",
+    "severity": 8
+  }
+]

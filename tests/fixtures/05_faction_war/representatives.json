@@ -1,0 +1,32 @@
+[
+  {
+    "id": "rep_a",
+    "name": "A",
+    "faction": "Progressives",
+    "influence": 85
+  },
+  {
+    "id": "rep_b",
+    "name": "B",
+    "faction": "Progressives",
+    "influence": 80
+  },
+  {
+    "id": "rep_c",
+    "name": "C",
+    "faction": "Conservatives",
+    "influence": 90
+  },
+  {
+    "id": "rep_d",
+    "name": "D",
+    "faction": "Conservatives",
+    "influence": 88
+  },
+  {
+    "id": "rep_e",
+    "name": "E",
+    "faction": "Conservatives",
+    "influence": 92
+  }
+]

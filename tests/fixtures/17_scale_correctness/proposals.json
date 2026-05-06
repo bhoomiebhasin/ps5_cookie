@@ -1,0 +1,182 @@
+[
+  {
+    "id": "prop_000",
+    "title": "Bill 0",
+    "sponsor": "rep_029",
+    "priority": 5.5
+  },
+  {
+    "id": "prop_001",
+    "title": "Bill 1",
+    "sponsor": "rep_039",
+    "priority": 3.8
+  },
+  {
+    "id": "prop_002",
+    "title": "Bill 2",
+    "sponsor": "rep_003",
+    "priority": 4.5
+  },
+  {
+    "id": "prop_003",
+    "title": "Bill 3",
+    "sponsor": "rep_018",
+    "priority": 3.9
+  },
+  {
+    "id": "prop_004",
+    "title": "Bill 4",
+    "sponsor": "rep_015",
+    "priority": 5.8
+  },
+  {
+    "id": "prop_005",
+    "title": "Bill 5",
+    "sponsor": "rep_031",
+    "priority": 3.6
+  },
+  {
+    "id": "prop_006",
+    "title": "Bill 6",
+    "sponsor": "rep_028",
+    "priority": 5.8
+  },
+  {
+    "id": "prop_007",
+    "title": "Bill 7",
+    "sponsor": "rep_017",
+    "priority": 9.2
+  },
+  {
+    "id": "prop_008",
+    "title": "Bill 8",
+    "sponsor": "rep_027",
+    "priority": 9.0
+  },
+  {
+    "id": "prop_009",
+    "title": "Bill 9",
+    "sponsor": "rep_017",
+    "priority": 7.9
+  },
+  {
+    "id": "prop_010",
+    "title": "Bill 10",
+    "sponsor": "rep_022",
+    "priority": 7.8
+  },
+  {
+    "id": "prop_011",
+    "title": "Bill 11",
+    "sponsor": "rep_024",
+    "priority": 9.7
+  },
+  {
+    "id": "prop_012",
+    "title": "Bill 12",
+    "sponsor": "rep_009",
+    "priority": 3.6
+  },
+  {
+    "id": "prop_013",
+    "title": "Bill 13",
+    "sponsor": "rep_009",
+    "priority": 4.6
+  },
+  {
+    "id": "prop_014",
+    "title": "Bill 14",
+    "sponsor": "rep_014",
+    "priority": 3.1
+  },
+  {
+    "id": "prop_015",
+    "title": "Bill 15",
+    "sponsor": "rep_037",
+    "priority": 4.3
+  },
+  {
+    "id": "prop_016",
+    "title": "Bill 16",
+    "sponsor": "rep_018",
+    "priority": 3.0
+  },
+  {
+    "id": "prop_017",
+    "title": "Bill 17",
+    "sponsor": "rep_026",
+    "priority": 6.7
+  },
+  {
+    "id": "prop_018",
+    "title": "Bill 18",
+    "sponsor": "rep_039",
+    "priority": 7.0
+  },
+  {
+    "id": "prop_019",
+    "title": "Bill 19",
+    "sponsor": "rep_008",
+    "priority": 7.8
+  },
+  {
+    "id": "prop_020",
+    "title": "Bill 20",
+    "sponsor": "rep_032",
+    "priority": 9.7
+  },
+  {
+    "id": "prop_021",
+    "title": "Bill 21",
+    "sponsor": "rep_041",
+    "priority": 7.7
+  },
+  {
+    "id": "prop_022",
+    "title": "Bill 22",
+    "sponsor": "rep_003",
+    "priority": 6.2
+  },
+  {
+    "id": "prop_023",
+    "title": "Bill 23",
+    "sponsor": "rep_049",
+    "priority": 9.7
+  },
+  {
+    "id": "prop_024",
+    "title": "Bill 24",
+    "sponsor": "rep_043",
+    "priority": 8.6
+  },
+  {
+    "id": "prop_025",
+    "title": "Bill 25",
+    "sponsor": "rep_025",
+    "priority": 5.8
+  },
+  {
+    "id": "prop_026",
+    "title": "Bill 26",
+    "sponsor": "rep_025",
+    "priority": 3.7
+  },
+  {
+    "id": "prop_027",
+    "title": "Bill 27",
+    "sponsor": "rep_040",
+    "priority": 5.8
+  },
+  {
+    "id": "prop_028",
+    "title": "Bill 28",
+    "sponsor": "rep_012",
+    "priority": 3.5
+  },
+  {
+    "id": "prop_029",
+    "title": "Bill 29",
+    "sponsor": "rep_013",
+    "priority": 6.1
+  }
+]

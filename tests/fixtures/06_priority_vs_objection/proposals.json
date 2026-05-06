@@ -1,0 +1,14 @@
+[
+  {
+    "id": "prop_high",
+    "title": "High-Priority Doomed",
+    "sponsor": "rep_a",
+    "priority": 10
+  },
+  {
+    "id": "prop_modest",
+    "title": "Modest But Clean",
+    "sponsor": "rep_b",
+    "priority": 5
+  }
+]

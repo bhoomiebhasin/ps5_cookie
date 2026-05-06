@@ -1,0 +1,8 @@
+{
+  "proposals_must_include": [
+    "prop_modest"
+  ],
+  "proposals_must_exclude": [
+    "prop_high"
+  ]
+}

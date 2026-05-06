@@ -1,0 +1,20 @@
+[
+  {
+    "id": "rep_a",
+    "name": "A",
+    "faction": "X",
+    "influence": 90
+  },
+  {
+    "id": "rep_b",
+    "name": "B",
+    "faction": "X",
+    "influence": 85
+  },
+  {
+    "id": "rep_c",
+    "name": "C",
+    "faction": "Y",
+    "influence": 80
+  }
+]

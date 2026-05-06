@@ -1,0 +1,302 @@
+[
+  {
+    "id": "rep_000",
+    "name": "Rep 0",
+    "faction": "Conservatives",
+    "influence": 92
+  },
+  {
+    "id": "rep_001",
+    "name": "Rep 1",
+    "faction": "Independents",
+    "influence": 88
+  },
+  {
+    "id": "rep_002",
+    "name": "Rep 2",
+    "faction": "Progressives",
+    "influence": 44
+  },
+  {
+    "id": "rep_003",
+    "name": "Rep 3",
+    "faction": "Progressives",
+    "influence": 63
+  },
+  {
+    "id": "rep_004",
+    "name": "Rep 4",
+    "faction": "Progressives",
+    "influence": 72
+  },
+  {
+    "id": "rep_005",
+    "name": "Rep 5",
+    "faction": "Moderates",
+    "influence": 42
+  },
+  {
+    "id": "rep_006",
+    "name": "Rep 6",
+    "faction": "Progressives",
+    "influence": 67
+  },
+  {
+    "id": "rep_007",
+    "name": "Rep 7",
+    "faction": "Independents",
+    "influence": 44
+  },
+  {
+    "id": "rep_008",
+    "name": "Rep 8",
+    "faction": "Moderates",
+    "influence": 45
+  },
+  {
+    "id": "rep_009",
+    "name": "Rep 9",
+    "faction": "Independents",
+    "influence": 43
+  },
+  {
+    "id": "rep_010",
+    "name": "Rep 10",
+    "faction": "Progressives",
+    "influence": 54
+  },
+  {
+    "id": "rep_011",
+    "name": "Rep 11",
+    "faction": "Progressives",
+    "influence": 76
+  },
+  {
+    "id": "rep_012",
+    "name": "Rep 12",
+    "faction": "Independents",
+    "influence": 43
+  },
+  {
+    "id": "rep_013",
+    "name": "Rep 13",
+    "faction": "Moderates",
+    "influence": 42
+  },
+  {
+    "id": "rep_014",
+    "name": "Rep 14",
+    "faction": "Moderates",
+    "influence": 58
+  },
+  {
+    "id": "rep_015",
+    "name": "Rep 15",
+    "faction": "Independents",
+    "influence": 49
+  },
+  {
+    "id": "rep_016",
+    "name": "Rep 16",
+    "faction": "Progressives",
+    "influence": 76
+  },
+  {
+    "id": "rep_017",
+    "name": "Rep 17",
+    "faction": "Conservatives",
+    "influence": 75
+  },
+  {
+    "id": "rep_018",
+    "name": "Rep 18",
+    "faction": "Moderates",
+    "influence": 46
+  },
+  {
+    "id": "rep_019",
+    "name": "Rep 19",
+    "faction": "Moderates",
+    "influence": 63
+  },
+  {
+    "id": "rep_020",
+    "name": "Rep 20",
+    "faction": "Progressives",
+    "influence": 75
+  },
+  {
+    "id": "rep_021",
+    "name": "Rep 21",
+    "faction": "Progressives",
+    "influence": 76
+  },
+  {
+    "id": "rep_022",
+    "name": "Rep 22",
+    "faction": "Progressives",
+    "influence": 79
+  },
+  {
+    "id": "rep_023",
+    "name": "Rep 23",
+    "faction": "Moderates",
+    "influence": 71
+  },
+  {
+    "id": "rep_024",
+    "name": "Rep 24",
+    "faction": "Independents",
+    "influence": 89
+  },
+  {
+    "id": "rep_025",
+    "name": "Rep 25",
+    "faction": "Conservatives",
+    "influence": 69
+  },
+  {
+    "id": "rep_026",
+    "name": "Rep 26",
+    "faction": "Independents",
+    "influence": 63
+  },
+  {
+    "id": "rep_027",
+    "name": "Rep 27",
+    "faction": "Conservatives",
+    "influence": 55
+  },
+  {
+    "id": "rep_028",
+    "name": "Rep 28",
+    "faction": "Moderates",
+    "influence": 84
+  },
+  {
+    "id": "rep_029",
+    "name": "Rep 29",
+    "faction": "Moderates",
+    "influence": 45
+  },
+  {
+    "id": "rep_030",
+    "name": "Rep 30",
+    "faction": "Conservatives",
+    "influence": 73
+  },
+  {
+    "id": "rep_031",
+    "name": "Rep 31",
+    "faction": "Independents",
+    "influence": 61
+  },
+  {
+    "id": "rep_032",
+    "name": "Rep 32",
+    "faction": "Independents",
+    "influence": 58
+  },
+  {
+    "id": "rep_033",
+    "name": "Rep 33",
+    "faction": "Progressives",
+    "influence": 47
+  },
+  {
+    "id": "rep_034",
+    "name": "Rep 34",
+    "faction": "Independents",
+    "influence": 50
+  },
+  {
+    "id": "rep_035",
+    "name": "Rep 35",
+    "faction": "Conservatives",
+    "influence": 49
+  },
+  {
+    "id": "rep_036",
+    "name": "Rep 36",
+    "faction": "Independents",
+    "influence": 66
+  },
+  {
+    "id": "rep_037",
+    "name": "Rep 37",
+    "faction": "Progressives",
+    "influence": 82
+  },
+  {
+    "id": "rep_038",
+    "name": "Rep 38",
+    "faction": "Progressives",
+    "influence": 88
+  },
+  {
+    "id": "rep_039",
+    "name": "Rep 39",
+    "faction": "Conservatives",
+    "influence": 61
+  },
+  {
+    "id": "rep_040",
+    "name": "Rep 40",
+    "faction": "Conservatives",
+    "influence": 78
+  },
+  {
+    "id": "rep_041",
+    "name": "Rep 41",
+    "faction": "Independents",
+    "influence": 77
+  },
+  {
+    "id": "rep_042",
+    "name": "Rep 42",
+    "faction": "Independents",
+    "influence": 44
+  },
+  {
+    "id": "rep_043",
+    "name": "Rep 43",
+    "faction": "Progressives",
+    "influence": 57
+  },
+  {
+    "id": "rep_044",
+    "name": "Rep 44",
+    "faction": "Independents",
+    "influence": 84
+  },
+  {
+    "id": "rep_045",
+    "name": "Rep 45",
+    "faction": "Progressives",
+    "influence": 43
+  },
+  {
+    "id": "rep_046",
+    "name": "Rep 46",
+    "faction": "Conservatives",
+    "influence": 81
+  },
+  {
+    "id": "rep_047",
+    "name": "Rep 47",
+    "faction": "Independents",
+    "influence": 58
+  },
+  {
+    "id": "rep_048",
+    "name": "Rep 48",
+    "faction": "Independents",
+    "influence": 82
+  },
+  {
+    "id": "rep_049",
+    "name": "Rep 49",
+    "faction": "Conservatives",
+    "influence": 41
+  }
+]

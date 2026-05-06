@@ -1,0 +1,7 @@
+from,to,trust,rivalry,betrayal_prob,last_interaction
+rep_a,rep_b,85,10,0.05,2024-10-01
+rep_b,rep_a,85,10,0.05,2024-10-01
+rep_c,rep_d,80,15,0.1,2024-10-01
+rep_d,rep_c,80,15,0.1,2024-10-01
+rep_d,rep_e,78,18,0.1,2024-10-01
+rep_e,rep_d,80,15,0.1,2024-10-01

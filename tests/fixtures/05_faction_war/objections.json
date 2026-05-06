@@ -1,0 +1,22 @@
+[
+  {
+    "rep_id": "rep_c",
+    "proposal_id": "prop_divisive",
+    "severity": 10
+  },
+  {
+    "rep_id": "rep_d",
+    "proposal_id": "prop_divisive",
+    "severity": 10
+  },
+  {
+    "rep_id": "rep_e",
+    "proposal_id": "prop_divisive",
+    "severity": 10
+  },
+  {
+    "rep_id": "rep_a",
+    "proposal_id": "prop_consensus",
+    "severity": 2
+  }
+]
